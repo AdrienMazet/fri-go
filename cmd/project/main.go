@@ -1,21 +1,20 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
 
-	"../../internal/paho"
+	"github.com/fri-go/internal/paho"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
-func onMessageReceived(client mqtt.Client, message mqtt.Message) {
-	// process message here
-	// redis
-	// CSV
-	fmt.Printf("Received message on topic: %s\nMessage: %s\n", message.Topic(), message.Payload())
+func redisSubHandler(client mqtt.Client, message mqtt.Message) {
+	// install redis
+	// configure redis (port, credentials ?, persistence)
+	// tests ?
+	redis.StoreData(message.Payload())
 }
 
 func main() {
@@ -24,7 +23,7 @@ func main() {
 
 	client := paho.Connect("tcp://localhost:1883", "mqtt_client")
 	topic := "main"
-	if token := client.Subscribe(topic, 0, onMessageReceived); token.Wait() && token.Error() != nil {
+	if token := client.Subscribe(topic, 0, redisSubHandler); token.Wait() && token.Error() != nil {
 		panic(token.Error())
 	}
 

@@ -6,20 +6,11 @@ import (
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
-type data struct {
-	idSensor   int
-	idAirport  string
-	sensorType string
-	value      float64
-	timestamp  time.Time
-}
-
-func getNewData() {
-	// faire une factory a data
-	//return new data()
-}
-
-// config from file
+// func getNewData() sensor.Data {
+// 	// faire une factory a data
+// 	//return new data()
+// 	return nil
+// }
 
 func startPubTemp(client mqtt.Client, topic string, period time.Duration) {
 	timer := time.NewTicker(period * time.Second)

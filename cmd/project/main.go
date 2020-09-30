@@ -8,8 +8,8 @@ import (
 	"syscall"
 	"time"
 
-	"../../internal/csv"
-	"../../internal/paho"
+	"github.com/fri-go/internal/csv"
+	"github.com/fri-go/internal/paho"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
@@ -26,6 +26,10 @@ func onMessageReceived(client mqtt.Client, message mqtt.Message) {
 	fmt.Printf("Received message on topic: %s\nMessage: %s\n", message.Topic(), message.Payload())
 	//csv part
 	csv.GenerateCsvData(message.Payload())
+	// install redis
+	// configure redis (port, credentials ?, persistence)
+	// tests ?
+	//redis.StoreData(message.Payload())
 }
 
 func loadConfiguration() Configuration {

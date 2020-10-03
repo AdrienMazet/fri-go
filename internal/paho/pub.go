@@ -33,7 +33,7 @@ func dataToText(d1 data) string {
 			"idAirport:" + d1.idAirport + "\n" +
 			"sensorType:" + d1.sensorType + "\n" +
 			"value:" + strconv.FormatFloat(d1.value, 'f', -1, 64) + "\n" +
-			"timestamp:" + d1.timestamp.Format("2006-01-02")) //on doit donner un exemple de formattage pour qu'il comprend
+			"timestamp:" + d1.timestamp.Format("2006-01-02")) //we must give on example to the Format function to make it work
 }
 
 func startPubTemp(client mqtt.Client, topic string, period time.Duration) {

@@ -12,16 +12,16 @@ import (
 	"time"
 
 	"../../internal/paho"
-
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
+//Configuration returns a structure for the Airport name
 type Configuration struct {
 	Airports []string
 	Timer    time.Duration
 }
 
-//teste si un fichier existe
+//test if the file exists
 func fileExists(filename string) bool {
 	info, err := os.Stat(filename)
 	if os.IsNotExist(err) {
@@ -30,24 +30,42 @@ func fileExists(filename string) bool {
 	return !info.IsDir()
 }
 
-//cree le fichier csv ou ajoute les donnees a la fin
+//function to generate the filename
+func generateFilename(tableau []string) string {
+	//idAirport_timestamp_sensorType.csv
+	return (strings.Split(tableau[1], ":")[1] + "_" +
+		strings.Split(tableau[4], "timestamp:")[1] + "_" +
+		strings.Split(tableau[2], ":")[1] + ".csv")
+}
+
+//function to format the data before adding it to the csv file
+func formatData(tableau []string, header bool) [][]string {
+	var data [][]string
+	if header {
+		data = append(data, []string{"idSensor", "Valeur"})
+	}
+	//we split on the ':' to retrieve the second value (actual one)
+	//tableau[0] = idSensor
+	//tableau[3] = value
+	data = append(data, []string{strings.Split(tableau[0], ":")[1], strings.Split(tableau[3], ":")[1]})
+	return (data)
+}
+
+//create the csv file or add to the end of the existing file
 func generateDataLake(tab []string) {
-	//creer le nom du fichier : idAirport_timestamp_sensorType.csv
-	filename := strings.Split(tab[1], ":")[1] + "_" +
-		strings.Split(tab[4], "timestamp:")[1] + "_" +
-		strings.Split(tab[2], ":")[1] + ".csv"
-	//tester si le csv existe avec le nom du fichier
+	//create the filename : idAirport_timestamp_sensorType.csv
+	filename := generateFilename(tab)
+	//test is the file exists and append data or create it and append data
 	if fileExists(filename) {
-		//ouvrir le csv et ajouter les donnees
+		//open the file and append data
 		f, err := os.OpenFile(filename, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
 		if err != nil {
 			log.Fatal(err)
 		}
 		defer f.Close()
-		//formattage des donnees avant ajout
-		var data [][]string
-		data = append(data, []string{strings.Split(tab[0], ":")[1], strings.Split(tab[3], ":")[1]})
-		//ecrire les donnees
+		//format data before appending
+		data := formatData(tab, false)
+		//write data to file
 		w := csv.NewWriter(f)
 		w.WriteAll(data)
 
@@ -56,7 +74,7 @@ func generateDataLake(tab []string) {
 		}
 		fmt.Println("Appending succed")
 	} else {
-		//creer le fichier et ajouter les donnees
+		//create the file and append data
 		file, err := os.Create(filename)
 		if err != nil {
 			log.Fatal("Impossible de créer le fichier", err)
@@ -64,10 +82,8 @@ func generateDataLake(tab []string) {
 		defer file.Close()
 		writer := csv.NewWriter(file)
 		defer writer.Flush()
-		//formatter les donnees a ajouter
-		var data [][]string
-		data = append(data, []string{"idSensor", "Valeur"})
-		data = append(data, []string{strings.Split(tab[0], ":")[1], strings.Split(tab[3], ":")[1]})
+		//format the data to append
+		data := formatData(tab, true)
 		for _, value := range data {
 			err := writer.Write(value)
 			if err != nil {
@@ -79,9 +95,9 @@ func generateDataLake(tab []string) {
 }
 
 func generateCsvData(message []byte) {
-	//conversion en string pour pouvoir filtrer
+	//string conversion used to filter data
 	res := string(message)
-	//split sur les retours charriots puis parsing avec la fonction
+	//split by newline and parsing using the function
 	generateDataLake(strings.Split(res, "\n"))
 }
 
@@ -89,7 +105,7 @@ func onMessageReceived(client mqtt.Client, message mqtt.Message) {
 	// process message here
 	// redis
 	fmt.Printf("Received message on topic: %s\nMessage: %s\n", message.Topic(), message.Payload())
-	//partie csv
+	//csv part
 	generateCsvData(message.Payload())
 }
 

@@ -111,7 +111,7 @@ func onMessageReceived(client mqtt.Client, message mqtt.Message) {
 
 func loadConfiguration() Configuration {
 	//Open file
-	file, _ := os.Open("conf.json")
+	file, _ := os.Open("cmd/project/conf.json")
 	defer file.Close()
 	decoder := json.NewDecoder(file)
 	configuration := Configuration{}
@@ -130,7 +130,6 @@ func main() {
 
 	//Load configuration
 	configuration := loadConfiguration()
-
 	//Sub to each topic from each airport
 	for i := 0; i < len(configuration.Airports); i++ {
 		topic := configuration.Airports[i]

@@ -2,17 +2,24 @@ package main
 
 import (
 	"encoding/csv"
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
 	"os/signal"
 	"strings"
 	"syscall"
+	"time"
 
 	"../../internal/paho"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
+
+type Configuration struct {
+	Airports []string
+	Timer    time.Duration
+}
 
 //teste si un fichier existe
 func fileExists(filename string) bool {
@@ -86,17 +93,38 @@ func onMessageReceived(client mqtt.Client, message mqtt.Message) {
 	generateCsvData(message.Payload())
 }
 
+func loadConfiguration() Configuration {
+	//Open file
+	file, _ := os.Open("conf.json")
+	defer file.Close()
+	decoder := json.NewDecoder(file)
+	configuration := Configuration{}
+	err := decoder.Decode(&configuration)
+	if err != nil {
+		fmt.Println("error:", err)
+	}
+	return configuration
+}
+
 func main() {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 
 	client := paho.Connect("tcp://localhost:1883", "mqtt_client")
-	topic := "main"
-	if token := client.Subscribe(topic, 0, onMessageReceived); token.Wait() && token.Error() != nil {
-		panic(token.Error())
-	}
 
-	paho.StartSensorsPubs(client, topic, 10)
+	//Load configuration
+	configuration := loadConfiguration()
+
+	//Sub to each topic from each airport
+	for i, airport := range configuration.Airports {
+		topic := airport
+		fmt.Println("%s", i)
+		if token := client.Subscribe(topic, 0, onMessageReceived); token.Wait() && token.Error() != nil {
+			panic(token.Error())
+		}
+
+		paho.StartSensorsPubs(client, topic, configuration.Timer)
+	}
 
 	<-c
 }

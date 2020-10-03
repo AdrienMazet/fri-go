@@ -116,9 +116,8 @@ func main() {
 	configuration := loadConfiguration()
 
 	//Sub to each topic from each airport
-	for i, airport := range configuration.Airports {
-		topic := airport
-		fmt.Println("%s", i)
+	for i := 0; i < len(configuration.Airports); i++ {
+		topic := configuration.Airports[i]
 		if token := client.Subscribe(topic, 0, onMessageReceived); token.Wait() && token.Error() != nil {
 			panic(token.Error())
 		}

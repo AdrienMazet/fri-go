@@ -27,19 +27,20 @@ func getNewData(sensorType string, idAirport string, t time.Time) data {
 	}
 }
 
-// config from file
+func dataToText(d1 data) string {
+	return fmt.Sprintf(
+		"idSensor:" + strconv.Itoa(d1.idSensor) + "\n" +
+			"idAirport:" + d1.idAirport + "\n" +
+			"sensorType:" + d1.sensorType + "\n" +
+			"value:" + strconv.FormatFloat(d1.value, 'f', -1, 64) + "\n" +
+			"timestamp:" + d1.timestamp.Format("2006-01-02")) //on doit donner un exemple de formattage pour qu'il comprend
+}
+
 func startPubTemp(client mqtt.Client, topic string, period time.Duration) {
 	timer := time.NewTicker(period * time.Second)
 	for t := range timer.C {
-		d1 := getNewData("temperature", topic, t)
-
-		//conversion en string sinon peut pas envoyer de message
-		text := fmt.Sprintf(
-			"idSensor:" + strconv.Itoa(d1.idSensor) + "\n" +
-				"idAirport:" + d1.idAirport + "\n" +
-				"sensorType:" + d1.sensorType + "\n" +
-				"value:" + strconv.FormatFloat(d1.value, 'f', -1, 64) + "\n" +
-				"timestamp:" + d1.timestamp.Format("2006-01-02")) //on doit donner un exemple de formattage pour qu'il comprend
+		//conversion to string so we can send the message
+		text := dataToText(getNewData("temperature", topic, t))
 		client.Publish(topic, 0, false, text)
 	}
 }
@@ -47,15 +48,8 @@ func startPubTemp(client mqtt.Client, topic string, period time.Duration) {
 func startPubWind(client mqtt.Client, topic string, period time.Duration) {
 	timer := time.NewTicker(period * time.Second)
 	for t := range timer.C {
-		d1 := getNewData("vent", topic, t)
-
-		//conversion en string sinon peut pas envoyer de message
-		text := fmt.Sprintf(
-			"idSensor:" + strconv.Itoa(d1.idSensor) + "\n" +
-				"idAirport:" + d1.idAirport + "\n" +
-				"sensorType:" + d1.sensorType + "\n" +
-				"value:" + strconv.FormatFloat(d1.value, 'f', -1, 64) + "\n" +
-				"timestamp:" + d1.timestamp.Format("2006-01-02")) //on doit donner un exemple de formattage pour qu'il comprend
+		//conversion to string so we can send the message
+		text := dataToText(getNewData("vent", topic, t))
 		client.Publish(topic, 0, false, text)
 	}
 }
@@ -63,15 +57,8 @@ func startPubWind(client mqtt.Client, topic string, period time.Duration) {
 func startPubPressure(client mqtt.Client, topic string, period time.Duration) {
 	timer := time.NewTicker(period * time.Second)
 	for t := range timer.C {
-		d1 := getNewData("pression", topic, t)
-
-		//conversion en string sinon peut pas envoyer de message
-		text := fmt.Sprintf(
-			"idSensor:" + strconv.Itoa(d1.idSensor) + "\n" +
-				"idAirport:" + d1.idAirport + "\n" +
-				"sensorType:" + d1.sensorType + "\n" +
-				"value:" + strconv.FormatFloat(d1.value, 'f', -1, 64) + "\n" +
-				"timestamp:" + d1.timestamp.Format("2006-01-02")) //on doit donner un exemple de formattage pour qu'il comprend
+		//conversion to string so we can send the message
+		text := dataToText(getNewData("pression", topic, t))
 		client.Publish(topic, 0, false, text)
 	}
 }

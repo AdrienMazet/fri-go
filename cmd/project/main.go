@@ -15,7 +15,7 @@ import (
 )
 
 func dataLakeHandler(client mqtt.Client, message mqtt.Message) {
-	csv.GenerateCsvData(message.Payload())
+	csv.StoreData(message.Payload())
 }
 
 func redisHandler(client mqtt.Client, message mqtt.Message) {
@@ -26,7 +26,6 @@ func redisHandler(client mqtt.Client, message mqtt.Message) {
 }
 
 func loadConfiguration() conf.Configuration {
-	//Open file
 	file, _ := os.Open("config/conf.json")
 	defer file.Close()
 	decoder := json.NewDecoder(file)
@@ -44,18 +43,15 @@ func main() {
 
 	client := paho.Connect("tcp://localhost:1883", "mqtt_client")
 
-	//Load configuration
 	configuration := loadConfiguration()
-	//Sub to each topic from each airport
+
 	for i := 0; i < len(configuration.Airports); i++ {
 		topic := configuration.Airports[i]
 
-		// redis sub
 		if token := client.Subscribe(topic, 0, redisHandler); token.Wait() && token.Error() != nil {
 			panic(token.Error())
 		}
 
-		// data lake sub
 		if token := client.Subscribe(topic, 0, dataLakeHandler); token.Wait() && token.Error() != nil {
 			panic(token.Error())
 		}

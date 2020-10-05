@@ -32,8 +32,10 @@ func fileExists(filename string) bool {
 
 //function to generate the filename
 func generateFilename(tableau []string) string {
+	// folder where the CSV are stored
+	folder := "data_lake/"
 	//idAirport_timestamp_sensorType.csv
-	return (strings.Split(tableau[1], ":")[1] + "_" +
+	return folder + (strings.Split(tableau[1], ":")[1] + "_" +
 		strings.Split(tableau[4], "timestamp:")[1] + "_" +
 		strings.Split(tableau[2], ":")[1] + ".csv")
 }

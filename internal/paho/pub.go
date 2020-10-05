@@ -11,28 +11,23 @@ import (
 )
 
 func getNewData(sensorType string, idAirport string, t time.Time) sensor.Data {
+	const minValue float64 = -5
+	const maxValue float64 = 30
 	return sensor.Data{
-		IDSensor:   01, // TODO : randomize this
+		IDSensor:   rand.Intn(100),
 		IDAirport:  idAirport,
 		SensorType: sensorType,
-		Value:      (-5) + rand.Float64()*(30-(-5)), // ??
-		Timestamp:  t,                               // TODO : format
+		Value:      minValue + rand.Float64()*(maxValue-minValue),
+		Timestamp:  t,
 	}
 }
 
-func dataToText(data sensor.Data) string {
+func dataToString(data sensor.Data) string {
 	dataJSON, err := json.Marshal(data)
 	if err != nil {
 		fmt.Println(err)
 	}
-
 	return string(dataJSON)
-	// return fmt.Sprintf(
-	// 	"IDSensor:" + strconv.Itoa(data.IDSensor) + "\n" +
-	// 		"IDAirport:" + data.IDAirport + "\n" +
-	// 		"SensorType:" + data.SensorType + "\n" +
-	// 		"Value:" + strconv.FormatFloat(data.Value, 'f', -1, 64) + "\n" +
-	// 		"Timestamp:" + data.Timestamp.Format("2006-01-02")) //we must give on example to the Format function to make it work
 }
 
 // StartSensorsPubs : start temperature, wind and pressure sensors
@@ -42,7 +37,7 @@ func StartSensorsPubs(client mqtt.Client, topic string, period time.Duration) {
 
 	for t := range timer.C {
 		for _, sensor := range sensors {
-			data := dataToText(getNewData(sensor, topic, t))
+			data := dataToString(getNewData(sensor, topic, t))
 			client.Publish(topic, 0, false, data)
 		}
 	}

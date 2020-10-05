@@ -7,33 +7,26 @@ import (
 	"time"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
+	"github.com/fri-go/types/sensor"
 )
 
-type data struct {
-	idSensor   int
-	idAirport  string
-	sensorType string
-	value      float64
-	timestamp  time.Time
-}
-
-func getNewData(sensorType string, idAirport string, t time.Time) data {
-	return data{
-		idSensor:   01,
-		idAirport:  idAirport,
-		sensorType: sensorType,
-		value:      (-5) + rand.Float64()*(30-(-5)), //valeur a modifier
-		timestamp:  t,
+func getNewData(sensorType string, idAirport string, t time.Time) sensor.Data {
+	return sensor.Data{
+		IDSensor:   01,
+		IDAirport:  idAirport,
+		SensorType: sensorType,
+		Value:      (-5) + rand.Float64()*(30-(-5)), //valeur a modifier
+		Timestamp:  t,
 	}
 }
 
-func dataToText(d1 data) string {
+func dataToText(data sensor.Data) string {
 	return fmt.Sprintf(
-		"idSensor:" + strconv.Itoa(d1.idSensor) + "\n" +
-			"idAirport:" + d1.idAirport + "\n" +
-			"sensorType:" + d1.sensorType + "\n" +
-			"value:" + strconv.FormatFloat(d1.value, 'f', -1, 64) + "\n" +
-			"timestamp:" + d1.timestamp.Format("2006-01-02")) //we must give on example to the Format function to make it work
+		"IDSensor:" + strconv.Itoa(data.IDSensor) + "\n" +
+			"IDAirport:" + data.IDAirport + "\n" +
+			"SensorType:" + data.SensorType + "\n" +
+			"Value:" + strconv.FormatFloat(data.Value, 'f', -1, 64) + "\n" +
+			"Timestamp:" + data.Timestamp.Format("2006-01-02")) //we must give on example to the Format function to make it work
 }
 
 // StartSensorsPubs : start all three sensors

@@ -9,6 +9,7 @@ import (
 
 	"github.com/fri-go/internal/csv"
 	"github.com/fri-go/internal/paho"
+	"github.com/fri-go/internal/redis"
 	"github.com/fri-go/types/conf"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
@@ -19,10 +20,7 @@ func dataLakeHandler(client mqtt.Client, message mqtt.Message) {
 }
 
 func redisHandler(client mqtt.Client, message mqtt.Message) {
-	// install redis
-	// configure redis (port, credentials ?, persistence)
-	// tests ?
-	//redis.StoreData(message.Payload())
+	redis.StoreData(message.Payload())
 }
 
 func loadConfiguration() conf.Configuration {

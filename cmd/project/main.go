@@ -46,16 +46,9 @@ func main() {
 	for i := 0; i < len(configuration.Airports); i++ {
 		topic := configuration.Airports[i]
 
-		if token := client.Subscribe(topic, 0, redisHandler); token.Wait() && token.Error() != nil {
-			panic(token.Error())
-		}
-
-		if token := client.Subscribe(topic, 0, dataLakeHandler); token.Wait() && token.Error() != nil {
-			panic(token.Error())
-		}
-
+		go client.Subscribe(topic, 0, redisHandler)
+		go client.Subscribe(topic, 0, dataLakeHandler)
 		go paho.StartSensorsPubs(client, topic, configuration.Timer)
 	}
-
 	<-c
 }

@@ -6,34 +6,28 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 
-	"../../internal/csv"
-	"../../internal/paho"
+	"github.com/fri-go/internal/csv"
+	"github.com/fri-go/internal/paho"
+	"github.com/fri-go/internal/redis"
+	"github.com/fri-go/types/conf"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
-//Configuration returns a structure for the Airport name
-type Configuration struct {
-	Airports []string
-	Timer    time.Duration
+func dataLakeHandler(client mqtt.Client, message mqtt.Message) {
+	csv.StoreData(message.Payload())
 }
 
-func onMessageReceived(client mqtt.Client, message mqtt.Message) {
-	// process message here
-	// redis
-	fmt.Printf("Received message on topic: %s\nMessage: %s\n", message.Topic(), message.Payload())
-	//csv part
-	csv.GenerateCsvData(message.Payload())
+func redisHandler(client mqtt.Client, message mqtt.Message) {
+	redis.StoreData(message.Payload())
 }
 
-func loadConfiguration() Configuration {
-	//Open file
+func loadConfiguration() conf.Configuration {
 	file, _ := os.Open("config/conf.json")
 	defer file.Close()
 	decoder := json.NewDecoder(file)
-	configuration := Configuration{}
+	configuration := conf.Configuration{}
 	err := decoder.Decode(&configuration)
 	if err != nil {
 		fmt.Println("error:", err)
@@ -47,17 +41,14 @@ func main() {
 
 	client := paho.Connect("tcp://localhost:1883", "mqtt_client")
 
-	//Load configuration
 	configuration := loadConfiguration()
-	//Sub to each topic from each airport
+
 	for i := 0; i < len(configuration.Airports); i++ {
 		topic := configuration.Airports[i]
-		if token := client.Subscribe(topic, 0, onMessageReceived); token.Wait() && token.Error() != nil {
-			panic(token.Error())
-		}
 
+		go client.Subscribe(topic, 0, redisHandler)
+		go client.Subscribe(topic, 0, dataLakeHandler)
 		go paho.StartSensorsPubs(client, topic, configuration.Timer)
 	}
-
 	<-c
 }

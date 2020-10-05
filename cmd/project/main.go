@@ -139,7 +139,7 @@ func main() {
 			panic(token.Error())
 		}
 
-		paho.StartSensorsPubs(client, topic, configuration.Timer)
+		go paho.StartSensorsPubs(client, topic, configuration.Timer)
 	}
 
 	<-c

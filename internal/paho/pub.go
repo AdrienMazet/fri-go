@@ -36,37 +36,15 @@ func dataToText(d1 data) string {
 			"timestamp:" + d1.timestamp.Format("2006-01-02")) //we must give on example to the Format function to make it work
 }
 
-func startPubTemp(client mqtt.Client, topic string, period time.Duration) {
-	timer := time.NewTicker(period * time.Second)
-	for t := range timer.C {
-		//conversion to string so we can send the message
-		text := dataToText(getNewData("temperature", topic, t))
-		client.Publish(topic, 0, false, text)
-	}
-}
-
-func startPubWind(client mqtt.Client, topic string, period time.Duration) {
-	timer := time.NewTicker(period * time.Second)
-	for t := range timer.C {
-		//conversion to string so we can send the message
-		text := dataToText(getNewData("vent", topic, t))
-		client.Publish(topic, 0, false, text)
-	}
-}
-
-func startPubPressure(client mqtt.Client, topic string, period time.Duration) {
-	timer := time.NewTicker(period * time.Second)
-	for t := range timer.C {
-		//conversion to string so we can send the message
-		text := dataToText(getNewData("pression", topic, t))
-		client.Publish(topic, 0, false, text)
-	}
-}
-
 // StartSensorsPubs : start all three sensors
 func StartSensorsPubs(client mqtt.Client, topic string, period time.Duration) {
-	rand.Seed(time.Now().UnixNano())
-	go startPubTemp(client, topic, period)
-	go startPubWind(client, topic, period)
-	go startPubPressure(client, topic, period)
+	sensors := [3]string{"temperature", "wind", "pressure"}
+	timer := time.NewTicker(period * time.Second)
+
+	for t := range timer.C {
+		for _, sensor := range sensors {
+			data := dataToText(getNewData(sensor, topic, t))
+			client.Publish(topic, 0, false, data)
+		}
+	}
 }

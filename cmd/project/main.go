@@ -111,7 +111,7 @@ func onMessageReceived(client mqtt.Client, message mqtt.Message) {
 
 func loadConfiguration() Configuration {
 	//Open file
-	file, _ := os.Open("cmd/project/conf.json")
+	file, _ := os.Open("config/conf.json")
 	defer file.Close()
 	decoder := json.NewDecoder(file)
 	configuration := Configuration{}

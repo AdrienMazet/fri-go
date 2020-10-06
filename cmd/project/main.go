@@ -15,12 +15,9 @@ import (
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
-func dataLakeHandler(client mqtt.Client, message mqtt.Message) {
-	csv.StoreData(message.Payload())
-}
-
-func redisHandler(client mqtt.Client, message mqtt.Message) {
-	redis.StoreData(message.Payload())
+func onMessageReceived(client mqtt.Client, message mqtt.Message) {
+	go redis.StoreData(message.Payload())
+	go csv.StoreData(message.Payload())
 }
 
 func loadConfiguration() conf.Configuration {
@@ -46,8 +43,7 @@ func main() {
 	for i := 0; i < len(conf.Airports); i++ {
 		topic := conf.Airports[i]
 
-		go client.Subscribe(topic, conf.Qos, redisHandler)
-		go client.Subscribe(topic, conf.Qos, dataLakeHandler)
+		client.Subscribe(topic, conf.Qos, onMessageReceived)
 		go paho.StartSensorsPubs(client, topic, conf.Timer, conf.Qos)
 	}
 	<-c

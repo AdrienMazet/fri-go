@@ -11,8 +11,6 @@ import (
 func createClientOptions(brokerURI string, clientID string) *mqtt.ClientOptions {
 	opts := mqtt.NewClientOptions()
 	opts.AddBroker(brokerURI)
-	// opts.SetUsername(user)
-	// opts.SetPassword(password)
 	opts.SetClientID(clientID)
 	return opts
 }

@@ -39,16 +39,16 @@ func main() {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 
-	client := paho.Connect("tcp://localhost:1883", "mqtt_client")
+	conf := loadConfiguration()
 
-	configuration := loadConfiguration()
+	client := paho.Connect(conf.Adress+":"+conf.Port, conf.ClientID)
 
-	for i := 0; i < len(configuration.Airports); i++ {
-		topic := configuration.Airports[i]
+	for i := 0; i < len(conf.Airports); i++ {
+		topic := conf.Airports[i]
 
-		go client.Subscribe(topic, 0, redisHandler)
-		go client.Subscribe(topic, 0, dataLakeHandler)
-		go paho.StartSensorsPubs(client, topic, configuration.Timer)
+		go client.Subscribe(topic, conf.Qos, redisHandler)
+		go client.Subscribe(topic, conf.Qos, dataLakeHandler)
+		go paho.StartSensorsPubs(client, topic, conf.Timer, conf.Qos)
 	}
 	<-c
 }

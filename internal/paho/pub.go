@@ -31,14 +31,14 @@ func dataToString(data sensor.Data) string {
 }
 
 // StartSensorsPubs : start temperature, wind and pressure sensors
-func StartSensorsPubs(client mqtt.Client, topic string, period time.Duration) {
+func StartSensorsPubs(client mqtt.Client, topic string, period time.Duration, qos byte) {
 	sensors := [3]string{"temperature", "wind", "pressure"}
 	timer := time.NewTicker(period * time.Second)
 
 	for t := range timer.C {
 		for _, sensor := range sensors {
 			data := dataToString(getNewData(sensor, topic, t))
-			client.Publish(topic, 0, false, data)
+			client.Publish(topic, qos, false, data)
 		}
 	}
 }

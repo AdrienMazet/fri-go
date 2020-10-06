@@ -1,4 +1,8 @@
 {
-    "Airports": ["ADL","AJA","AMA","APK"],
-    "Timer": 2
+  "Adress": "tcp://localhost",
+  "Port": "1883",
+  "ClientID": "mqtt_client",
+  "Qos": 0,
+  "Airports": ["ADL", "AJA", "AMA", "APK"],
+  "Timer": 10
 }

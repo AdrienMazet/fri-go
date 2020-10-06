@@ -3,7 +3,6 @@ package redis
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"strconv"
 
 	"github.com/fri-go/types/sensor"
@@ -12,8 +11,6 @@ import (
 
 var ctx = context.Background()
 
-// TODO : Singleton ?
-// TODO : Configure redis (port, credentials, persistence) ?
 var rdb = redis.NewClient(&redis.Options{
 	Addr:     "localhost:6379",
 	Password: "", // no password set
@@ -35,10 +32,4 @@ func writeData(data sensor.Data) {
 	if err != nil {
 		panic(err)
 	}
-
-	val, err := rdb.Get(ctx, key).Result()
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(key, val)
 }

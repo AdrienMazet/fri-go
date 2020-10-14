@@ -12,3 +12,10 @@ type Data struct {
 	Value      float64
 	Timestamp  time.Time
 }
+
+// Average : average values of 3 sensors
+type Average struct {
+	Temperature float64
+	Wind        float64
+	Pressure    float64
+}

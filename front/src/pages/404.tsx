@@ -1,13 +1,27 @@
+import { Header, Words, Button } from "arwes"
 import React from "react"
-
-import Layout from "../components/layout"
-import SEO from "../components/seo"
+import Layout from "../components/Layout"
+import { Link } from "gatsby"
 
 const NotFoundPage = () => (
   <Layout>
-    <SEO title="404: Not found" />
-    <h1>404: Not Found</h1>
-    <p>You just hit a route that doesn&#39;t exist... the sadness.</p>
+    <Header animate>
+      <h1 style={{ margin: 0 }}>404: Not Found</h1>
+    </Header>
+    <div
+      style={{ display: "flex", flexDirection: "row", alignItems: "center" }}
+    >
+      <p>
+        <Words animate layer="alert">
+          You went throught the wrong portal, go back to your root galaxy quick.
+        </Words>
+      </p>
+      <Link to="/">
+        <Button animate style={{ marginLeft: 15 }}>
+          Take me home
+        </Button>
+      </Link>
+    </div>
   </Layout>
 )
 

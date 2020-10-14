@@ -1,2 +1,4 @@
 data_lake/*.csv
 .idea
+server.exe
+pubsub.exe

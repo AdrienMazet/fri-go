@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
+	"strings"
+	"time"
 
 	"github.com/fri-go/types/sensor"
 	"github.com/go-redis/redis/v8"
@@ -69,4 +71,38 @@ func GetAverageSensorValue(idAirport string, date string, sensorType string) flo
 	average := total / float64(len(values))
 
 	return average
+}
+
+// GetAirportData : return all data (keys and values) for an airport
+func GetAirportData(IDairport string) []sensor.Data {
+	keys, err := rdb.Keys(ctx, "*:"+IDairport+":*").Result()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	datas := make([]sensor.Data, len(keys))
+
+	for i := 0; i < len(keys); i++ {
+		strval := rdb.Get(ctx, keys[i])
+		value, err := strval.Float64()
+
+		splittedKey := strings.Split(keys[i], ":")
+		idSensor, err := strconv.Atoi(splittedKey[0])
+		sensorType := splittedKey[2]
+		timestamp, err := time.Parse(isoDateLayout, splittedKey[3]+":"+splittedKey[4]+":"+splittedKey[5])
+
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		datas[i] = sensor.Data{
+			IDSensor:   idSensor,
+			IDAirport:  IDairport,
+			SensorType: sensorType,
+			Value:      value,
+			Timestamp:  timestamp,
+		}
+	}
+
+	return datas
 }

@@ -1,16 +1,15 @@
-package server
+package main
 
 import (
+	"github.com/fri-go/internal/server/controllers"
 	"github.com/gorilla/mux"
 )
 
-// InitializeRouter : create a new router with 2 routes
 func InitializeRouter() *mux.Router {
-	// redirect /cars/ to /cars
+	// StrictSlash is true => redirect /cars/ to /cars
 	router := mux.NewRouter().StrictSlash(true)
 
-	router.Methods("GET").Path("/{idAirport}/filter/{sensorType}/{date1}/{date2}").Name("getSensorDataBetweenDates").HandlerFunc(GetSensorDataBetweenDates)
-	router.Methods("GET").Path("/{idAirport}/{date}/results/average").Name("getAverageValues").HandlerFunc(GetAverageValues)
-
+	router.Methods("GET").Path("/{dataType}/filter/date").Name("filterDataByDate").HandlerFunc(controllers.FilterDataByDate)
+	router.Methods("GET").Path("/results/average").Name("getAverageValues").HandlerFunc(controllers.GetAverageValues)
 	return router
 }

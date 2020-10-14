@@ -2,7 +2,11 @@ package configuration
 
 import (
 	"encoding/json"
+<<<<<<< HEAD
 	"log"
+=======
+	"fmt"
+>>>>>>> d455e4a... moved server folder in internal
 	"os"
 
 	"github.com/fri-go/types/conf"
@@ -16,7 +20,11 @@ func LoadConfiguration() conf.Configuration {
 	configuration := conf.Configuration{}
 	err := decoder.Decode(&configuration)
 	if err != nil {
+<<<<<<< HEAD
 		log.Fatal(err)
+=======
+		fmt.Println("error:", err)
+>>>>>>> d455e4a... moved server folder in internal
 	}
 	return configuration
 }

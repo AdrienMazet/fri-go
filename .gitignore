@@ -1,2 +1,3 @@
-main
 data_lake/*.csv
+server.*
+main.*

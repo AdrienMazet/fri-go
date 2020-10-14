@@ -1,7 +1,6 @@
 package server
 
 import (
-	"github.com/fri-go/internal/server/controllers"
 	"github.com/gorilla/mux"
 )
 
@@ -10,8 +9,8 @@ func InitializeRouter() *mux.Router {
 	// redirect /cars/ to /cars
 	router := mux.NewRouter().StrictSlash(true)
 
-	router.Methods("GET").Path("{IDAirport}/filter/{SensorType}/{date1}/{date2}").Name("getSensorDataBetweenDates").HandlerFunc(controllers.GetSensorDataBetweenDates)
-	router.Methods("GET").Path("{IDAirport}/results/average").Name("getAverageValues").HandlerFunc(controllers.GetAverageValues)
+	router.Methods("GET").Path("/{idAirport}/filter/{sensorType}/{date1}/{date2}").Name("getSensorDataBetweenDates").HandlerFunc(GetSensorDataBetweenDates)
+	router.Methods("GET").Path("/{idAirport}/{date}/results/average").Name("getAverageValues").HandlerFunc(GetAverageValues)
 
 	return router
 }

@@ -1,3 +1,2 @@
 data_lake/*.csv
-server.*
-main.*
+.idea

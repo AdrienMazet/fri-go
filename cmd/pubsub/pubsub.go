@@ -1,16 +1,14 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
 
+	"github.com/fri-go/internal/configuration"
 	"github.com/fri-go/internal/csv"
 	"github.com/fri-go/internal/paho"
 	"github.com/fri-go/internal/redis"
-	"github.com/fri-go/types/conf"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
@@ -20,23 +18,11 @@ func onMessageReceived(client mqtt.Client, message mqtt.Message) {
 	go csv.StoreData(message.Payload())
 }
 
-func loadConfiguration() conf.Configuration {
-	file, _ := os.Open("config/conf.json")
-	defer file.Close()
-	decoder := json.NewDecoder(file)
-	configuration := conf.Configuration{}
-	err := decoder.Decode(&configuration)
-	if err != nil {
-		fmt.Println("error:", err)
-	}
-	return configuration
-}
-
 func main() {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 
-	conf := loadConfiguration()
+	conf := configuration.LoadConfiguration()
 
 	client := paho.Connect(conf.Adress+":"+conf.Port, conf.ClientID)
 

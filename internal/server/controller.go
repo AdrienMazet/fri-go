@@ -2,16 +2,21 @@ package server
 
 import (
 	"encoding/json"
+<<<<<<< HEAD
 	"fmt"
 	"math"
 	"net/http"
 	"time"
+=======
+	"net/http"
+>>>>>>> b89d3dd... Route for average done
 
 	"github.com/fri-go/internal/redis"
 	"github.com/fri-go/types/sensor"
 	"github.com/gorilla/mux"
 )
 
+<<<<<<< HEAD
 // GetSensorDataBetweenDates : return sensor values between two dates for an airport
 func GetSensorDataBetweenDates(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json;charset=UTF-8")
@@ -44,11 +49,60 @@ func GetSensorDataBetweenDates(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(m)
+=======
+// conf := configuration.LoadConfiguration()
+
+// for i := 0; i < len(conf.Airports); i++ {
+// 	airport := conf.Airports[i]
+// 	fmt.Println(redis.GetAirportData(airport))
+// 	fmt.Println(".")
+// }
+
+// GetSensorDataBetweenDates : return sensor values between to dates
+func GetSensorDataBetweenDates(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application/json;charset=UTF-8")
+	w.WriteHeader(http.StatusOK)
+
+	// vars := mux.Vars(r)
+	// dateA, err := vars["dateA"]
+	// dateB, err := vars["dateB"]
+
+	// if err {
+	// 	log.Fatal(err)
+	// }
+
+	// client := redis.NewClient(&redis.Options{
+	// 	Addr:     "localhost:6379",
+	// 	Password: "",
+	// 	DB:       0,
+	// })
+
+	// ctx := client.Context()
+
+	// startDate, _ := time.Parse(layoutISO, dateA)
+	// endDate, _ := time.Parse(layoutISO, dateB)
+	// currentDate := startDate
+	// for currentDate.Before(endDate) {
+	// 	fmt.Println(startDate)
+	// 	val, err := client.Get(ctx, dateA).Result()
+	// 	if err != nil {
+	// 		fmt.Println(err)
+	// 	}
+	// 	fmt.Println(val)
+	// 	currentDate = currentDate.Add(24 * time.Hour)
+	// }
+
+	json.NewEncoder(w).Encode("end")
+>>>>>>> b89d3dd... Route for average done
 }
 
 // GetAverageValues : return the average of all 3 types of values for an airport and for a day
 func GetAverageValues(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json;charset=UTF-8")
+<<<<<<< HEAD
+=======
+	w.WriteHeader(http.StatusOK)
+>>>>>>> b89d3dd... Route for average done
 
 	reqVars := mux.Vars(r)
 	idAirport := reqVars["idAirport"]
@@ -60,6 +114,9 @@ func GetAverageValues(w http.ResponseWriter, r *http.Request) {
 
 	averageValues := sensor.Average{Temperature: averageTemperature, Pressure: averagePressure, Wind: averageWind}
 
+<<<<<<< HEAD
 	w.WriteHeader(http.StatusOK)
+=======
+>>>>>>> b89d3dd... Route for average done
 	json.NewEncoder(w).Encode(averageValues)
 }

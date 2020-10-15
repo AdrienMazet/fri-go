@@ -4,6 +4,7 @@ import (
 	"fmt"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	"net/http"
 
 	"github.com/fri-go/internal/server"
@@ -20,6 +21,8 @@ func main() {
 =======
 =======
 	"log"
+=======
+>>>>>>> 9b86a94... refacto
 	"net/http"
 >>>>>>> 756fc63... launch server and create routes
 
@@ -41,6 +44,10 @@ func main() {
 >>>>>>> d455e4a... moved server folder in internal
 =======
 	router := server.InitializeRouter()
+<<<<<<< HEAD
 	log.Fatal(http.ListenAndServe(":8080", router))
 >>>>>>> 756fc63... launch server and create routes
+=======
+	fmt.Println(http.ListenAndServe(":8080", router))
+>>>>>>> 9b86a94... refacto
 }

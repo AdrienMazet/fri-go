@@ -1,4 +1,5 @@
-import { Button, Project, Words } from "arwes"
+import { Button, Image, Project } from "arwes"
+import { Link } from "gatsby"
 import React from "react"
 
 type Props = {
@@ -8,36 +9,22 @@ type Props = {
 const SpatioportCard = ({ name }: Props) => (
   <div style={{ padding: 20, width: "23%" }}>
     <Project animate header={`Spatioport : ${name}`}>
-      {anim => (
-        <p>
-          <Words animate show={anim.entered}>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis laboris nisi ut aliquip ex. Duis aute irure.
-            Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-            labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-            nostrud.
-          </Words>
-        </p>
-      )}
-      <p>
-        <Words animate>Moyenne de la journée </Words>
-      </p>
-      <p>
-        <Words animate>Temperature : 50 °C </Words>
-      </p>
-      <p>
-        <Words animate layer="success">
-          Pression : 2 Pascals
-        </Words>
-      </p>
-      <p>
-        <Words animate layer="alert">
-          Vents solaires : 75km/h
-        </Words>
-      </p>
+      <div>
+        <Image animate resources={`/images/spatioports/${name}.jpg`} />
+      </div>
       <div style={{ padding: "20px" }}>
-        <Button animate>Plus de détails</Button>
+        <Link to={`/spatioport/${name}`}>
+          <Button
+            animate
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <p style={{ fontSize: 30 }}>Relevés spaciaux</p>
+          </Button>
+        </Link>
       </div>
     </Project>
   </div>

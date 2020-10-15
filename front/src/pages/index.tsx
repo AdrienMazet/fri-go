@@ -11,12 +11,18 @@ const IndexPage = () => (
         <h1 style={{ margin: 0 }}>Spatioports</h1>
       </Header>
     </div>
-    <h3 style={{ marginLeft: 20, marginBottom: 100 }}>
+    <h3 style={{ marginLeft: 20, marginBottom: 30 }}>
       <Words animate>A proximité de votre planète :</Words>
     </h3>
-    <div style={{display: "flex", alignItems: "center", justifyContent:"center"}}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       {conf.Airports.map(airport => (
-        <SpatioportCard name={airport} />
+        <SpatioportCard name={airport} key={airport} />
       ))}
     </div>
   </Layout>

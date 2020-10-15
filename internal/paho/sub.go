@@ -2,7 +2,6 @@ package paho
 
 import (
 	"fmt"
-	"log"
 	"time"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
@@ -24,9 +23,9 @@ func Connect(brokerURI string, clientID string) mqtt.Client {
 	for !token.WaitTimeout(3 * time.Second) {
 	}
 	if err := token.Error(); err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	} else {
-		fmt.Printf("Connected to server\n")
+		fmt.Println("Connected to server")
 	}
 	return client
 }

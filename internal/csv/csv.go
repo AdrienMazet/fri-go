@@ -3,7 +3,7 @@ package csv
 import (
 	"encoding/csv"
 	"encoding/json"
-	"log"
+	"fmt"
 	"os"
 	"strconv"
 
@@ -34,13 +34,13 @@ func appendDataToCsv(data sensor.Data) {
 		// create file
 		_, err := os.Create(filename)
 		if err != nil {
-			log.Fatal("Can't create file :"+filename, err)
+			fmt.Println("Can't create file :"+filename, err)
 		}
 	}
 
 	file, err := os.OpenFile(filename, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 	defer file.Close()
 
@@ -55,7 +55,7 @@ func appendDataToCsv(data sensor.Data) {
 	writer.Write([]string{strconv.Itoa(data.IDSensor), strconv.FormatFloat(data.Value, 'E', -1, 64)})
 
 	if err := writer.Error(); err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 }
 

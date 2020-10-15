@@ -2,7 +2,7 @@ package configuration
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"os"
 
 	"github.com/fri-go/types/conf"
@@ -16,7 +16,7 @@ func LoadConfiguration() conf.Configuration {
 	configuration := conf.Configuration{}
 	err := decoder.Decode(&configuration)
 	if err != nil {
-		fmt.Println("error:", err)
+		log.Fatal(err)
 	}
 	return configuration
 }

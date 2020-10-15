@@ -3,11 +3,13 @@ package server
 import (
 	"encoding/json"
 	"net/http"
-
+    "time"
 	"github.com/fri-go/internal/redis"
 	"github.com/fri-go/types/sensor"
 	"github.com/gorilla/mux"
 )
+
+const layoutISO = "2006-01-02";
 
 // conf := configuration.LoadConfiguration()
 
@@ -17,10 +19,30 @@ import (
 // 	fmt.Println(".")
 // }
 
-// GetSensorDataBetweenDates : return sensor values between to dates
+// GetSensorDataBetweenDates : return sensor values between two dates
 func GetSensorDataBetweenDates(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json;charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
+
+	reqVars := mux.Vars(r)
+	idAirport := reqVars["idAirport"]
+	sensorType := reqVars["sensorType"]
+	date1 := reqVars["date1"]
+	date2 := reqVars["date2"]
+
+    var m map[string]float64
+
+    dateA := time.Parse(layoutISO, date1)
+    dateB := time.Parse(layoutISO, date2)
+
+    for (dateA.Before(dateB)) {
+        dateStr := string(dateA.String()[0:10]);
+    	key, value := redis.GetSensorDataByDate(idAirport, dateStr, sensorType)
+    	m[key] = value
+        dateA.AddDate(0, 0, 1)
+    }
+
+	json.NewEncoder(w).Encode(averageValues)
 
 	// vars := mux.Vars(r)
 	// dateA, err := vars["dateA"]

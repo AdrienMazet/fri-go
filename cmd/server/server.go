@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/fri-go/internal/server"
@@ -15,5 +14,5 @@ func main() {
 	fmt.Println("GET /{idAirport}/{date}/results/average")
 
 	router := server.InitializeRouter()
-	log.Fatal(http.ListenAndServe(":8080", router))
+	fmt.Println(http.ListenAndServe(":8080", router))
 }

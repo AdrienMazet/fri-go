@@ -63,3 +63,31 @@ func GetAverageSensorValue(idAirport string, date string, sensorType string) flo
 
 	return average
 }
+
+// GetAverageSensorValue : get average value for a sensor of an airport on a date
+func GetSensorDataByDate(idAirport string, date string, sensorType string) float64 {
+	keys, err := rdb.Keys(ctx, "*:"+idAirport+":"+sensorType+":"+date+"*").Result()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	values := make([]float64, len(keys))
+
+	for i := 0; i < len(keys); i++ {
+		strval := rdb.Get(ctx, keys[i])
+		value, err := strval.Float64()
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		values[i] = value
+	}
+
+	var total float64 = 0
+	for _, value := range values {
+		total += value
+	}
+	average := total / float64(len(values))
+
+	return average
+}

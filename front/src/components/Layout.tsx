@@ -8,9 +8,10 @@ import ThemeSelector from "./ThemeSelector"
 type Props = {
   children: JSX.Element | JSX.Element[]
   name?: string
+  header?: boolean
 }
 
-const Layout = ({ children, name }: Props) => {
+const Layout = ({ children, name, header }: Props) => {
   const [themeName, setThemeName] = useState(localStorage.getItem("themeName"))
   const [theme, setTheme] = useState(createTheme())
 
@@ -46,45 +47,47 @@ const Layout = ({ children, name }: Props) => {
           background="/images/background.jpg"
           pattern="/images/glow.png"
         >
-          <div style={{ padding: 20 }}>
-            <Header animate>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <div>
-                  <h1 style={{ margin: 0 }}>{`Spatioport${
-                    name ? " : " + name : "s"
-                  }`}</h1>
-                  {name && (
-                    <Link to="/">
-                      <Button
-                        animate
-                        style={{ marginTop: 15, marginBottom: 15 }}
-                      >
-                        Go home
-                      </Button>
-                    </Link>
-                  )}
-                </div>
-                <div style={{ display: "flex" }}>
-                  <ThemeSelector
-                    style={{ marginRight: 15, marginTop: name ? 12 : 0 }}
-                  />
-                  {name && (
-                    <Image
-                      animate
-                      resources={`/images/spatioports/${name}.jpg`}
-                      style={{ width: 100, marginRight: 15 }}
+          {header && (
+            <div style={{ padding: 20 }}>
+              <Header animate>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <div>
+                    <h1 style={{ margin: 0 }}>{`Spatioport${
+                      name ? " : " + name : "s"
+                    }`}</h1>
+                    {name && (
+                      <Link to="/">
+                        <Button
+                          animate
+                          style={{ marginTop: 15, marginBottom: 15 }}
+                        >
+                          Accueil
+                        </Button>
+                      </Link>
+                    )}
+                  </div>
+                  <div style={{ display: "flex" }}>
+                    <ThemeSelector
+                      style={{ marginRight: 15, marginTop: name ? 12 : 0 }}
                     />
-                  )}
+                    {name && (
+                      <Image
+                        animate
+                        resources={`/images/spatioports/${name}.jpg`}
+                        style={{ width: 100, marginRight: 15 }}
+                      />
+                    )}
+                  </div>
                 </div>
-              </div>
-            </Header>
-          </div>
+              </Header>
+            </div>
+          )}
           <main>{children}</main>
         </Arwes>
       </ThemeProvider>

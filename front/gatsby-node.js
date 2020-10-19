@@ -30,13 +30,13 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
           dates[0],
           dates[dates.length - 1]
         )
-        sensorValues = { ...sensorValues, sensorType: response.data }
+        sensorValues = { ...sensorValues, [sensorType]: response.data }
       })
     ).then(() => {
       Promise.all(
         dates.map(async date => {
           const res = await getAverageSensorsValues(airport, date)
-          averageSensorValues = { ...averageSensorValues, date: res.data }
+          averageSensorValues = { ...averageSensorValues, [date]: res.data }
         })
       ).then(() =>
         createPage({

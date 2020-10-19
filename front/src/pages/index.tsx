@@ -5,7 +5,7 @@ import conf from "../../../config/conf.json"
 import SpatioportCard from "../components/SpatioportCard"
 
 const IndexPage = () => (
-  <Layout>
+  <Layout header>
     <h3 style={{ marginLeft: 20, marginBottom: 30 }}>
       <Words animate>A proximité de votre planète :</Words>
     </h3>

@@ -1,14 +1,16 @@
 import React from "react"
 import { withStyles, Frame } from "arwes"
+import myTheme from "../theme/base_theme"
+import LabelText from "./LabelText"
 
 const styles = theme => ({
-  //   container: {
-  //     [`@media (max-width: ${theme.responsive.small + 1}px)`]: {
-  //       display: "flex",
-  //       flexDirection: "column",
-  //       marginBottom: '.5em',
-  //     },
-  //   },
+  container: {
+    [`@media (max-width: ${theme.responsive.small + 1}px)`]: {
+      display: "flex",
+      flexDirection: "column",
+      marginBottom: ".5em",
+    },
+  },
   labelText: {
     width: 150,
     display: "inline-block",
@@ -24,13 +26,13 @@ const styles = theme => ({
     outline: "none",
     boxShadow: "none",
     cursor: "pointer",
-    backgroundColor: "red",
-    color: "red",
-    //fontSize: theme.font.baseSize,
+    backgroundColor: myTheme.color.background.main,
+    color: theme.color.primary.base,
+    fontSize: myTheme.font.baseSize,
     lineHeight: "30px",
-    // [`@media (max-width: ${theme.responsive.small + 1}px)`]: {
-    //   width: '100%',
-    // },
+    [`@media (max-width: ${theme.responsive.small + 1}px)`]: {
+      width: "100%",
+    },
   },
   frame: {
     width: "auto",
@@ -40,20 +42,11 @@ const styles = theme => ({
 })
 
 const SelectOption = withStyles(styles)(
-  ({
-    classes,
-    onChange,
-    name,
-    options,
-    optionValueId,
-    optionInnerContent,
-    required,
-    selected,
-    selectClass,
-  }) => {
+  ({ classes, label, onChange, name, options, selected, selectClass }) => {
     return (
-      <div>
+      <div style={{ marginBottom: 30 }}>
         <label className={classes.container}>
+          {label && <LabelText label={label} />}
           <Frame
             show={true}
             animate={true}
@@ -64,15 +57,11 @@ const SelectOption = withStyles(styles)(
               name={name}
               onChange={onChange}
               className={selectClass ? selectClass : classes.select}
-              required={required}
             >
               {options.map(option => {
                 return (
-                  <option
-                    value={option[optionValueId]}
-                    selected={selected === option[optionValueId]}
-                  >
-                    {option[optionInnerContent]}
+                  <option value={option} selected={selected === option}>
+                    {option}
                   </option>
                 )
               })}

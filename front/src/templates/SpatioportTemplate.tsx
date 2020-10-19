@@ -1,25 +1,35 @@
-import { Header } from "arwes"
-import React from "react"
+import { Header, Image } from "arwes"
+import React, { useState } from "react"
+import dates from "../assets/dates.json"
 import Layout from "../components/Layout"
 
 type Props = {
-    pageContext: {
-        data: {
-            name: string
-            sensorValues: any
-            averageSensorValues: any
-        }
+  pageContext: {
+    data: {
+      name: string
+      sensorValues: any
+      averageSensorValues: any
     }
+  }
 }
 
 const SpatioportTemplate = (props: Props) => {
-  const {name, sensorValues, averageSensorValues} = props.pageContext.data
+  const { name, sensorValues, averageSensorValues } = props.pageContext.data
+
+  // display image
+  console.log(sensorValues)
+  console.log(averageSensorValues)
   return (
-    <Layout>
-      <div style={{ padding: 20 }}>
-        <Header animate>
-          <h1 style={{ margin: 0 }}>{name}</h1>
-        </Header>
+    <Layout name={name}>
+      <div style={{ display: "flex", alignItems: "flex-start" }}>
+        <div style={{ width: "40%", marginLeft: 25 }}></div>
+        <div style={{ width: "60%" }}>
+          <select multiple onChange={event => console.log(event)}>
+            {dates.map(date => (
+              <option value={date}>{date}</option>
+            ))}
+          </select>
+        </div>
       </div>
     </Layout>
   )
@@ -43,18 +53,6 @@ export default SpatioportTemplate
 //       endDate={endDate}
 //       selectsRange
 //       inline
-//     />
-//   );
-// };
-
-// () => {
-//   const [startDate, setStartDate] = useState(null);
-//   return (
-//     <DatePicker
-//       selected={startDate}
-//       onChange={date => setStartDate(date)}
-//       includeDates={[new Date(), addDays(new Date(), 1)]}
-//       placeholderText="This only includes today and tomorrow"
 //     />
 //   );
 // };

@@ -6,11 +6,6 @@ import SpatioportCard from "../components/SpatioportCard"
 
 const IndexPage = () => (
   <Layout>
-    <div style={{ padding: 20 }}>
-      <Header animate>
-        <h1 style={{ margin: 0 }}>Spatioports</h1>
-      </Header>
-    </div>
     <h3 style={{ marginLeft: 20, marginBottom: 30 }}>
       <Words animate>A proximité de votre planète :</Words>
     </h3>

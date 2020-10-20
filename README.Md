@@ -1,5 +1,12 @@
 # fri-go
 
+## Contributeurs
+
+- Adrien Mazet
+- Charlotte Leclère
+- Isuru Haupe
+- Clémentine Biais
+
 ## lancer le projet
 
 lancer redis-server
@@ -27,3 +34,7 @@ gatsby develop
 - internal : code métier
 
 - types : structures de données
+
+## Documentation de l'API
+
+[Swagger fri-go](https://app.swaggerhub.com/apis-docs/f393/weather-reports_api/1.0.0?fbclid=IwAR12l7smon1b4lH5xQ1gKTxNN0P-Pr_qe3pP8dx83P5kgp21OFviog7Dw_c)

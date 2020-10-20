@@ -1,19 +1,4 @@
 data_lake/*.csv
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 .idea
 server.exe
 pubsub.exe
-=======
-server.*
-main.*
->>>>>>> 6b7220d... executables added to gitignore
-=======
-.idea
->>>>>>> d455e4a... moved server folder in internal
-=======
-.idea
-server.exe
-pubsub.exe
->>>>>>> 756fc63... launch server and create routes

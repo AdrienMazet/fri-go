@@ -2,14 +2,28 @@
 
 ## lancer le projet
 
-go build cmd/project/main.go
+lancer redis-server
 
-./main
+go build cmd/pubsub/pubsub.go  
+go build cmd/server/server.go
+
+./pubsub  
+./server
+
+cd front  
+npm install  
+gatsby develop
 
 ## Structure des fichiers
 
-- cmd : main de l'application, importe des méthodes pkg
-
-- internal : code de l'application
+- cmd : launchers de l'application, importe des méthodes de internal
 
 - config : fichiers de config
+
+- data_lake : dossier contenant les fichiers csv constituant un data lake
+
+- front : projet Gatsby contenant le front-end
+
+- internal : code métier
+
+- types : structures de données

@@ -12,7 +12,7 @@ type Props = {
 }
 
 const Layout = ({ children, name, header }: Props) => {
-  const [themeName, setThemeName] = useState(localStorage.getItem("themeName"))
+  const [themeName, setThemeName] = useState(typeof window !== 'undefined' && localStorage.getItem("themeName"))
   const [theme, setTheme] = useState(createTheme())
 
   const updateTheme = (themeName?) => {
